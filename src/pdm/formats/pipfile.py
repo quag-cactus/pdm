@@ -43,8 +43,9 @@ def convert_pipfile_requirement(name: str, req: RequirementDict, backend: BuildB
     return r.as_line()
 
 
-def check_fingerprint(project: Project, filename: PathLike) -> bool:
-    return os.path.basename(filename) == "Pipfile"
+def check_fingerprint(project: Project | None, filename: PathLike) -> bool:
+    filepath = project.root / filename if project is not None else filename
+    return os.path.basename(filepath) == "Pipfile"
 
 
 def convert(project: Project, filename: PathLike, options: Namespace | None) -> tuple[dict[str, Any], dict[str, Any]]:

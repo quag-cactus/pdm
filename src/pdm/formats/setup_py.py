@@ -7,11 +7,14 @@ from typing import TYPE_CHECKING, Any, Mapping
 from pdm.formats.base import array_of_inline_tables, make_array, make_inline_table
 
 if TYPE_CHECKING:
+    from os import PathLike
+
     from pdm.project import Project
 
 
-def check_fingerprint(project: Project, filename: Path) -> bool:
-    return os.path.basename(filename) == "setup.py"
+def check_fingerprint(project: Project | None, filename: PathLike) -> bool:
+    filepath = project.root / filename if project is not None else filename
+    return os.path.basename(filepath) == "setup.py"
 
 
 def convert(project: Project, filename: Path, options: Any | None) -> tuple[Mapping[str, Any], Mapping[str, Any]]:

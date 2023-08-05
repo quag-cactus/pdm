@@ -23,15 +23,17 @@ from pdm.utils import cd
 
 if TYPE_CHECKING:
     from argparse import Namespace
+    from os import PathLike
 
     from pdm._types import RequirementDict
     from pdm.project import Project
 
 
-def check_fingerprint(project: Project | None, filename: Path | str) -> bool:
+def check_fingerprint(project: Project | None, filename: PathLike) -> bool:
     if Path(filename).name != "pyproject.toml":
         return False
-    with open(filename, "rb") as fp:
+    filepath = project.root / filename if project is not None else filename
+    with open(filepath, "rb") as fp:
         try:
             data = tomllib.load(fp)
         except tomllib.TOMLDecodeError:

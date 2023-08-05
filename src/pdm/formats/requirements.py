@@ -90,9 +90,10 @@ class RequirementParser:
                 self._parse_line(this_line)
 
 
-def check_fingerprint(project: Project, filename: PathLike) -> bool:
+def check_fingerprint(project: Project | None, filename: PathLike) -> bool:
     from pdm.compat import tomllib
 
+    project.root / filename if project is not None else filename
     with open(filename, "rb") as fp:
         try:
             tomllib.load(fp)

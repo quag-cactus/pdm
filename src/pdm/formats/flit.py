@@ -24,7 +24,8 @@ if TYPE_CHECKING:
 
 
 def check_fingerprint(project: Project | None, filename: PathLike) -> bool:
-    with open(filename, "rb") as fp:
+    filepath = project.root / filename if project is not None else filename
+    with open(filepath, "rb") as fp:
         try:
             data = tomllib.load(fp)
         except tomllib.TOMLDecodeError:
